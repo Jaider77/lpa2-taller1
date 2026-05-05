@@ -8,7 +8,16 @@ from typing import List, Dict, Optional, Union
 # Corrección de imports para ejecución directa
 from models.mueble import Mueble
 from models.composicion.comedor import Comedor
-# TODO: Importar las clases necesarias
+# Importar clases concretas necesarias para la tienda
+from models.concretos.silla import Silla
+from models.concretos.mesa import Mesa
+from models.concretos.cama import Cama
+from models.concretos.sofa import Sofa
+from models.concretos.sillon import Sillon
+from models.concretos.armario import Armario
+from models.concretos.cajonera import Cajonera
+from models.concretos.escritorio import Escritorio
+from models.concretos.sofacama import SofaCama
 
 
 class TiendaMuebles:
@@ -185,6 +194,22 @@ class TiendaMuebles:
             f"Comedor {getattr(comedor, 'nombre', str(comedor))} agregado exitosamente"
         )
 
+    def obtener_inventario(self) -> List["Mueble"]:
+        """
+        Retorna una copia del inventario actual.
+        Returns:
+            List[Mueble]: Copia de la lista de muebles en inventario
+        """
+        return self._inventario.copy()
+
+    def obtener_comedores(self) -> List["Comedor"]:
+        """
+        Retorna una copia de la lista de comedores.
+        Returns:
+            List[Comedor]: Copia de la lista de comedores
+        """
+        return self._comedores.copy()
+
     def buscar_muebles_por_nombre(self, nombre: str) -> List["Mueble"]:
         """
         Busca muebles por nombre (búsqueda parcial, case-insensitive).
@@ -261,13 +286,58 @@ class TiendaMuebles:
         Returns:
             List[Mueble]: Lista de muebles del tipo especificado
         """
-        # TODO: Implementar filtro por tipo
-        # resultados = []
-        # for mueble in self._inventario:
-        #     if isinstance(mueble, tipo_clase):
-        #         resultados.append(mueble)
-        # return resultados
-        pass
+        resultados = []
+        for mueble in self._inventario:
+            if isinstance(mueble, tipo_clase):
+                resultados.append(mueble)
+        return resultados
+
+    def filtrar_por_tipo(self, nombre_tipo: str) -> List["Mueble"]:
+        """
+        Filtra muebles por nombre de tipo (string).
+
+        Args:
+            nombre_tipo: Nombre de la clase del tipo (ej: "Silla", "Mesa")
+
+        Returns:
+            List[Mueble]: Lista de muebles del tipo especificado
+        """
+        resultados = []
+        for mueble in self._inventario:
+            if type(mueble).__name__ == nombre_tipo:
+                resultados.append(mueble)
+        return resultados
+
+    def buscar_por_nombre(self, nombre: str) -> Optional["Mueble"]:
+        """
+        Alias para buscar_muebles_por_nombre que retorna el primer resultado o None.
+        """
+        resultados = self.buscar_muebles_por_nombre(nombre)
+        return resultados[0] if resultados else None
+
+    def calcular_precio_final(self, nombre_mueble: str) -> Optional[float]:
+        """
+        Calcula el precio final de un mueble aplicando descuentos.
+
+        Args:
+            nombre_mueble: Nombre del mueble
+
+        Returns:
+            Optional[float]: Precio final con descuento aplicado, o None si no se encuentra
+        """
+        mueble = self.buscar_por_nombre(nombre_mueble)
+        if not mueble:
+            return None
+
+        precio_original = mueble.calcular_precio()
+        tipo_mueble = type(mueble).__name__
+
+        descuento_aplicado = 0
+        if self._descuentos_activos and tipo_mueble in self._descuentos_activos:
+            descuento_aplicado = self._descuentos_activos[tipo_mueble]
+
+        precio_final = precio_original * (1 - descuento_aplicado)
+        return round(precio_final, 2)
 
     def calcular_valor_inventario(self) -> float:
         """
@@ -276,22 +346,20 @@ class TiendaMuebles:
         Returns:
             float: Valor total de todos los muebles en inventario
         """
-        # TODO: Implementar cálculo de valor total
-        # valor_total = 0
-        # for mueble in self._inventario:
-        #     try:
-        #         valor_total += mueble.calcular_precio()
-        #     except Exception:
-        #         continue  # Saltar muebles con errores
+        valor_total = 0
+        for mueble in self._inventario:
+            try:
+                valor_total += mueble.calcular_precio()
+            except Exception:
+                continue  # Saltar muebles con errores
 
-        # for comedor in self._comedores:
-        #     try:
-        #         valor_total += comedor.calcular_precio_total()
-        #     except Exception:
-        #         continue
+        for comedor in self._comedores:
+            try:
+                valor_total += comedor.calcular_precio_total()
+            except Exception:
+                continue
 
-        # return round(valor_total, 2)
-        pass
+        return round(valor_total, 2)
 
     def aplicar_descuento(self, categoria: str, porcentaje: float) -> str:
         """
@@ -299,12 +367,12 @@ class TiendaMuebles:
 
         Args:
             categoria: Nombre de la categoría (ej: "sillas", "mesas")
-            porcentaje: Porcentaje de descuento (0-100)
+            porcentaje: Porcentaje de descuento (0-100 o 0.0-1.0)
         Returns:
             str: Mensaje de confirmación
         """
-        if not 0 < porcentaje <= 100:
-            return "Error: El porcentaje debe estar entre 1 y 100"
+        if porcentaje <= 0 or porcentaje > 100:
+            return "Error: El porcentaje debe estar entre 0.01 y 100"
         categoria_lower = categoria.lower().strip()
         # Normalizar nombres de clase (Silla, Mesa, etc.)
         # El sistema usa el nombre de la clase, por ejemplo 'Silla', 'Mesa', etc.
@@ -313,14 +381,63 @@ class TiendaMuebles:
             categoria_lower = categoria_lower[:-1]
         # Capitalizar para coincidir con el nombre de clase
         categoria_clase = categoria_lower.capitalize()
-        self._descuentos_activos[categoria_clase] = porcentaje / 100
+
+        # Si el porcentaje es <= 1, asumir que ya es decimal (0.1 = 10%)
+        # Si es > 1, convertir de porcentaje a decimal (10 = 10%)
+        descuento_decimal = porcentaje if porcentaje <= 1 else porcentaje / 100.0
+
+        self._descuentos_activos[categoria_clase] = descuento_decimal
+        porcentaje_mostrar = porcentaje if porcentaje > 1 else porcentaje * 100
         return (
-            f"Descuento del {porcentaje}% aplicado a la categoría '{categoria_clase}'"
+            f"Descuento del {porcentaje_mostrar}% aplicado a la categoría '{categoria_clase}'"
         )
 
-    def realizar_venta(
-        self, mueble: "Mueble", cliente: str = "Cliente Anónimo"
-    ) -> Dict:
+    def remover_descuento(self, categoria: str) -> str:
+        """
+        Remueve un descuento aplicado a una categoría de muebles.
+
+        Args:
+            categoria: Nombre de la categoría (ej: "sillas", "mesas")
+        Returns:
+            str: Mensaje de confirmación
+        """
+        categoria_lower = categoria.lower().strip()
+        # Normalizar nombres de clase (Silla, Mesa, etc.)
+        if categoria_lower.endswith("s"):
+            categoria_lower = categoria_lower[:-1]
+        categoria_clase = categoria_lower.capitalize()
+
+        if categoria_clase in self._descuentos_activos:
+            del self._descuentos_activos[categoria_clase]
+            return f"Descuento removido de la categoría '{categoria_clase}'"
+        else:
+            return f"No hay descuento aplicado a la categoría '{categoria_clase}'"
+
+    def vender_por_nombre(self, nombre_mueble: str, cliente: str = "Cliente Anónimo") -> str:
+        """
+        Vende un mueble buscando por nombre.
+
+        Args:
+            nombre_mueble: Nombre del mueble a vender
+            cliente: Nombre del cliente
+
+        Returns:
+            str: Mensaje de confirmación o error
+        """
+        muebles_encontrados = self.buscar_muebles_por_nombre(nombre_mueble)
+        if not muebles_encontrados:
+            return f"Error: No se encontró ningún mueble con el nombre '{nombre_mueble}'"
+
+        # Vender el primer mueble encontrado
+        mueble_a_vender = muebles_encontrados[0]
+        resultado_venta = self.realizar_venta(mueble_a_vender, cliente)
+
+        if "error" in resultado_venta:
+            return f"Error: {resultado_venta['error']}"
+        else:
+            return f"Venta realizada exitosamente: {resultado_venta['mueble']} vendido a {resultado_venta['cliente']} por ${resultado_venta['precio_final']}"
+
+    def realizar_venta(self, mueble: "Mueble", cliente: str = "Cliente Anónimo") -> Dict:
         """
         Procesa la venta de un mueble.
         Args:
@@ -370,13 +487,11 @@ class TiendaMuebles:
         Returns:
             Dict[str, int]: Diccionario con el conteo por tipo
         """
-        # TODO: Implementar conteo por tipos
-        # conteo = {}
-        # for mueble in self._inventario:
-        #     tipo = type(mueble).__name__
-        #     conteo[tipo] = conteo.get(tipo, 0) + 1
-        # return conteo
-        pass
+        conteo = {}
+        for mueble in self._inventario:
+            tipo = type(mueble).__name__
+            conteo[tipo] = conteo.get(tipo, 0) + 1
+        return conteo
 
     def generar_reporte_inventario(self) -> str:
         """

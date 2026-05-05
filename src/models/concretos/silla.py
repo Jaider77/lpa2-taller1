@@ -3,7 +3,7 @@ Clase concreta Silla.
 Implementa un mueble de asiento específico para una persona.
 """
 
-from ..categorias.asientos import Asiento
+from src.models.categorias.asientos import Asiento
 
 
 class Silla(Asiento):

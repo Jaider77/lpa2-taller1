@@ -180,7 +180,7 @@ class TestMueble:
 
 ### Pruebas para Herencia
 
-**tests/unit/models/concretos/test_silla.py:**
+**pytest tests/unit/models/concretos/test_silla.py - v:**
 
 ```python
 import pytest
