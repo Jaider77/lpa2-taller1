@@ -211,7 +211,7 @@ def crear_catalogo_inicial(tienda: "TiendaMuebles") -> None:
         resultado = tienda.agregar_mueble(mueble)
         print(f"  ✓ {resultado}")
 
-    print(f"✅ Catálogo inicial creado con éxito!")
+    print(f"✅ Catálogo inicial creado con éxito!")  # noqa: F541
 
 
 def crear_comedores_ejemplo(tienda: "TiendaMuebles") -> None:
@@ -221,7 +221,7 @@ def crear_comedores_ejemplo(tienda: "TiendaMuebles") -> None:
     Args:
         tienda: Instancia de TiendaMuebles donde agregar los comedores
     """
-    print("\n🍽️ Creando comedores de ejemplo...")
+    print("\n Creando comedores de ejemplo...")
 
     mesa_familiar = Mesa(
         nombre="Mesa Familiar Extensible",

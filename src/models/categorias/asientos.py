@@ -101,7 +101,7 @@ class Asiento(Mueble, ABC):
         # Factor adicional por capacidad
         factor += (self.capacidad_personas - 1) * 0.05
 
-        return factor
+        return round(factor, 1)  # Redondear a 1 decimal para evitar problemas de precisión
 
     def obtener_info_asiento(self) -> str:
         """

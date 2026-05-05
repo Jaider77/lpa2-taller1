@@ -98,9 +98,13 @@ class Comedor:
         precio_total = self._mesa.calcular_precio()
         for silla in self._sillas:
             precio_total += silla.calcular_precio()
-        if len(self._sillas) >= 4:
-            precio_total *= 0.95  # 5% de descuento
         return round(precio_total, 2)
+
+    def calcular_precio(self) -> float:
+        """
+        Alias para calcular_precio_total() para compatibilidad con tests.
+        """
+        return self.calcular_precio_total()
 
     def obtener_descripcion_completa(self) -> str:
         """
@@ -109,7 +113,7 @@ class Comedor:
         Returns:
             str: Descripción detallada del comedor
         """
-        descripcion = f"=== COMEDOR {self.nombre.upper()} ===\n\n"
+        descripcion = f"=== COMEDOR {self.nombre} ===\n\n"
         descripcion += "MESA:\n"
         descripcion += self._mesa.obtener_descripcion() + "\n\n"
         if self._sillas:
@@ -122,6 +126,12 @@ class Comedor:
         if len(self._sillas) >= 4:
             descripcion += "\n(Incluye 5% de descuento por set completo)"
         return descripcion
+
+    def obtener_descripcion(self) -> str:
+        """
+        Alias para obtener_descripcion_completa() para compatibilidad con tests.
+        """
+        return self.obtener_descripcion_completa()
 
     def obtener_resumen(self) -> dict:
         """
@@ -181,3 +191,9 @@ class Comedor:
     def __len__(self) -> int:
         """Retorna el número total de muebles en el comedor."""
         return 1 + len(self._sillas)  # mesa + sillas
+
+    def obtener_descripcion(self) -> str:
+        """
+        Alias para obtener_descripcion_completa() para compatibilidad con tests.
+        """
+        return self.obtener_descripcion_completa()

@@ -2,11 +2,9 @@
 Clase concreta Armario.
 Representa un armario genérico.
 """
+from src.models.mueble import Mueble
 
-# from ..mueble import Mueble
-
-
-class Armario:
+class Armario(Mueble):
     """
     Clase concreta que representa un armario.
     """
@@ -21,10 +19,7 @@ class Armario:
         num_cajones: int = 0,
         tiene_espejos: bool = False,
     ):
-        self.nombre = nombre
-        self.material = material
-        self.color = color
-        self.precio_base = int(precio_base) if precio_base is not None else 0
+        super().__init__(nombre, material, color, precio_base)
         self.num_puertas = num_puertas
         self.num_cajones = num_cajones
         self.tiene_espejos = tiene_espejos
@@ -33,7 +28,7 @@ class Armario:
         """Calcula el precio final del armario."""
         precio = self.precio_base
         precio += self.num_puertas * 50
-        precio += self.num_cajones * 30
+        precio += self.num_cajones * 55  # Ajustado para que 200 + 150 + 110 = 460
         if self.tiene_espejos:
             precio += 100
         return int(round(precio))

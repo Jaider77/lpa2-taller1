@@ -32,6 +32,11 @@ class SofaCama(Sofa, Cama):
         tamaño_cama: str = "matrimonial",
         incluye_colchon: bool = True,
         mecanismo_conversion: str = "plegable",
+        # Parámetros adicionales para compatibilidad con tests
+        tamaño_colchon: str = None,
+        tiene_respaldo: bool = True,
+        es_reclinable: bool = False,
+        incluye_almacenamiento: bool = False,
     ):
         """
         Constructor del sofá-cama.
@@ -40,6 +45,9 @@ class SofaCama(Sofa, Cama):
             mecanismo_conversion: Tipo de mecanismo de conversión (plegable, extensible, etc.)
             Otros argumentos se pasan a las clases padre
         """
+        # Usar tamaño_colchon si se proporciona, sino tamaño_cama
+        tamaño = tamaño_colchon if tamaño_colchon else tamaño_cama
+        
         # Usar super() para llamar al constructor de Sofa (primer padre en MRO)
         Sofa.__init__(
             self,
@@ -48,15 +56,17 @@ class SofaCama(Sofa, Cama):
             color,
             precio_base,
             capacidad_personas,
-            True,
+            tiene_respaldo,
             material_tapizado,
         )
         # Inicializar atributos específicos de cama
-        self._tamaño = tamaño_cama
+        self._tamaño = tamaño
         self._incluye_colchon = incluye_colchon
         # Atributos específicos del sofá-cama
         self._mecanismo_conversion = mecanismo_conversion
         self._modo_actual = "sofa"
+        self._es_reclinable = es_reclinable
+        self._incluye_almacenamiento = incluye_almacenamiento
 
     def calcular_precio(self) -> float:
         """
@@ -104,6 +114,11 @@ class SofaCama(Sofa, Cama):
     @property
     def tamaño_cama(self) -> str:
         """Alias para tamaño específico de cama."""
+        return self._tamaño
+
+    @property
+    def tamaño_colchon(self) -> str:
+        """Alias para tamaño del colchón."""
         return self._tamaño
 
     def convertir_a_cama(self) -> str:

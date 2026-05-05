@@ -43,7 +43,7 @@ class Mueble(ABC):
         """Setter para el nombre con validación."""
         if not value or not value.strip():
             raise ValueError("El nombre no puede estar vacío")
-        self._nombre = value.strip()
+        self._nombre = ' '.join(value.split())
 
     @property
     def material(self) -> str:

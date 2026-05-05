@@ -4,9 +4,9 @@ Representa una cajonera genérica.
 """
 
 # from ..mueble import Mueble
+from src.models.mueble import Mueble
 
-
-class Cajonera:
+class Cajonera(Mueble):
     """
     Clase concreta que representa una cajonera.
     """
@@ -20,10 +20,7 @@ class Cajonera:
         num_cajones: int = 3,
         tiene_ruedas: bool = False,
     ):
-        self.nombre = nombre
-        self.material = material
-        self.color = color
-        self.precio_base = int(precio_base) if precio_base is not None else 0
+        super().__init__(nombre, material, color, precio_base)
         self.num_cajones = num_cajones
         self.tiene_ruedas = tiene_ruedas
 

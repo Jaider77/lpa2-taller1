@@ -57,24 +57,24 @@ class Silla(Asiento):
         """Setter para ruedas."""
         self._tiene_ruedas = value
 
+    def calcular_factor_comodidad(self) -> float:
+        """
+        Calcula el factor de comodidad específico para sillas.
+        """
+        factor = super().calcular_factor_comodidad()
+        if self.altura_regulable:
+            factor += 0.1
+        if self.tiene_ruedas:
+            factor += 0.05
+        return round(factor, 1)
+
     def calcular_precio(self) -> float:
         """
         Implementa el cálculo de precio específico para sillas.
         Returns:
             float: Precio final de la silla
         """
-        precio = self.precio_base
-
-        # Aplicar factor de comodidad
-        factor_comodidad = self.calcular_factor_comodidad()
-        precio *= factor_comodidad
-
-        # Características específicas de silla
-        if self.altura_regulable:
-            precio += 30
-        if self.tiene_ruedas:
-            precio += 20
-
+        precio = self.precio_base * self.calcular_factor_comodidad()
         return round(precio, 2)
 
     def obtener_descripcion(self) -> str:

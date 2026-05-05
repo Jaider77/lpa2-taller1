@@ -5,7 +5,7 @@ Estas pruebas verifican la integración entre múltiples componentes
 del sistema.
 """
 
-import pytest
+import pytest  # noqa: F401
 from src.services.tienda import TiendaMuebles
 from src.models.concretos.silla import Silla
 from src.models.concretos.mesa import Mesa
@@ -164,7 +164,7 @@ class TestIntegracionValidaciones:
         tienda.agregar_mueble(Silla("Silla", "Madera", "Rojo", 50.0))
         
         # Intentar aplicar descuento inválido
-        resultado = tienda.aplicar_descuento("Silla", 1.5)
+        resultado = tienda.aplicar_descuento("Silla", 1.5)  # noqa: F841
         
         # Dependiendo de la implementación, puede ser rechazado
         # o limitado a valores válidos

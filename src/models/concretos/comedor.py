@@ -4,7 +4,7 @@ from ..concretos.silla import Silla
 
 
 class Comedor:
-    def calcular_precio_total(self) -> float:
+    def calcular_precio(self) -> float:
         total = self.mesa.calcular_precio()
         total += sum(silla.calcular_precio() for silla in self.sillas)
         return total
