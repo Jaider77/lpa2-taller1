@@ -1,5 +1,7 @@
 # Guía Completa de `pytest`
 
+J
+
 [`pytest`](https://docs.pytest.org/en/stable/) es un **framework de testing en Python** diseñado para facilitar la escritura, ejecución y mantenimiento de pruebas automatizadas. Se destaca por su **sintaxis simple y expresiva**, que permite crear desde **pruebas unitarias básicas** hasta **suites complejas de integración o funcionales** sin necesidad de código boilerplate.
 
 Además de su facilidad de uso, `pytest` ofrece un **ecosistema robusto de plugins** que amplía sus capacidades —por ejemplo, para la generación de reportes, el manejo de pruebas parametrizadas, la ejecución paralela, la simulación de entornos, y la integración con herramientas de CI/CD.
