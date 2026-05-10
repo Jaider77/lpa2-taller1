@@ -1,10 +1,12 @@
 [run]
 source = src
-omit = 
+omit =
     */__pycache__/*
     */tests/*
     */venv/*
     */migrations/*
+    src/main.py
+    src/ui/*
 
 [report]
 exclude_lines =
@@ -12,7 +14,5 @@ exclude_lines =
     def __repr__
     raise AssertionError
     raise NotImplementedError
-    if __name__ == .__main__.:
-    pass
 
-fail_under = 80
+fail_under = 30

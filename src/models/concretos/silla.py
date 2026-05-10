@@ -63,10 +63,10 @@ class Silla(Asiento):
         """
         factor = super().calcular_factor_comodidad()
         if self.altura_regulable:
-            factor += 0.05
-        if self.tiene_ruedas:
             factor += 0.1
-        return round(factor, 1)
+        if self.tiene_ruedas:
+            factor += 0.05
+        return factor
 
     def calcular_precio(self) -> float:
         """

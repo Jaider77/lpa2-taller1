@@ -4,22 +4,28 @@ Punto de entrada principal para la aplicación Tienda de Muebles.
 Este archivo inicializa la aplicación y proporciona datos de ejemplo.
 """
 
+import os
 import sys
-sys.path.insert(0, 'src')
 
-from services.tienda import TiendaMuebles
-from ui.menu import MenuTienda
 
-from models.concretos.silla import Silla
-from models.concretos.sillon import Sillon
-from models.concretos.sofa import Sofa
-from models.concretos.mesa import Mesa
-from models.concretos.armario import Armario
-from models.concretos.cama import Cama
-from models.concretos.escritorio import Escritorio
-from models.concretos.cajonera import Cajonera
-from models.concretos.sofacama import SofaCama
-from models.composicion.comedor import Comedor
+from src.services.tienda import TiendaMuebles
+from src.ui.menu import MenuTienda
+
+from src.models.concretos.silla import Silla
+from src.models.concretos.sillon import Sillon
+from src.models.concretos.sofa import Sofa
+from src.models.concretos.mesa import Mesa
+from src.models.concretos.armario import Armario
+from src.models.concretos.cama import Cama
+from src.models.concretos.escritorio import Escritorio
+from src.models.concretos.cajonera import Cajonera
+from src.models.concretos.sofacama import SofaCama
+from src.models.composicion.comedor import Comedor
+
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 
 def crear_catalogo_inicial(tienda: "TiendaMuebles") -> None:

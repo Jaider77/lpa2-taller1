@@ -77,8 +77,8 @@ class Mueble(ABC):
     @precio_base.setter
     def precio_base(self, value: float) -> None:
         """Setter para el precio base con validación."""
-        if value < 0:
-            raise ValueError("El precio base no puede ser negativo")
+        if value <= 0:
+            raise ValueError("El precio base debe ser mayor que cero")
         self._precio_base = value
 
     @abstractmethod

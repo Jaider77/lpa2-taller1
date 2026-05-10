@@ -123,9 +123,9 @@ class TestMuebleProperties:
         assert mueble_concreto.precio_base == 250.0
 
     def test_precio_base_setter_cero(self, mueble_concreto):
-        """Prueba que setter de precio_base acepta cero (precio regalado)."""
-        mueble_concreto.precio_base = 0.0
-        assert mueble_concreto.precio_base == 0.0
+        """Prueba que setter de precio_base rechaza cero."""
+        with pytest.raises(ValueError, match="El precio base debe ser mayor que cero"):
+            mueble_concreto.precio_base = 0.0
 
     def test_precio_base_setter_negativo_lanza_error(self, mueble_concreto):
         """Prueba que setter de precio_base rechaza valores negativos."""
@@ -146,3 +146,76 @@ class TestMuebleProperties:
         assert silla.material == "Cuero"
         assert silla.color == "Negro"
         assert silla.precio_base == 500.0
+
+
+class TestMuebleConstructorValidations:
+    """
+    Grupo de pruebas para validar que el constructor aplique
+    las validaciones de los setters.
+    """
+
+    def test_constructor_con_precio_negativo_lanza_error(self):
+        """Prueba que constructor rechaza precio negativo."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El precio base debe ser mayor que cero"):
+            MuebleConcreto("Mesa", "Madera", "Rojo", -100.0)
+
+    def test_constructor_con_precio_cero_lanza_error(self):
+        """Prueba que constructor rechaza precio cero."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El precio base debe ser mayor que cero"):
+            MuebleConcreto("Mesa", "Madera", "Rojo", 0.0)
+
+    def test_constructor_con_nombre_vacio_lanza_error(self):
+        """Prueba que constructor rechaza nombre vacío."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El nombre no puede estar vacío"):
+            MuebleConcreto("", "Madera", "Rojo", 100.0)
+
+    def test_constructor_con_nombre_espacios_lanza_error(self):
+        """Prueba que constructor rechaza nombre solo espacios."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El nombre no puede estar vacío"):
+            MuebleConcreto("   ", "Madera", "Rojo", 100.0)
+
+    def test_constructor_con_material_vacio_lanza_error(self):
+        """Prueba que constructor rechaza material vacío."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El material no puede estar vacío"):
+            MuebleConcreto("Mesa", "", "Rojo", 100.0)
+
+    def test_constructor_con_color_vacio_lanza_error(self):
+        """Prueba que constructor rechaza color vacío."""
+        class MuebleConcreto(Mueble):
+            def calcular_precio(self):
+                return self.precio_base
+            def obtener_descripcion(self):
+                return self.nombre
+        
+        with pytest.raises(ValueError, match="El color no puede estar vacío"):
+            MuebleConcreto("Mesa", "Madera", "", 100.0)

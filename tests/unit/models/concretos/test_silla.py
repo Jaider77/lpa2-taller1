@@ -9,7 +9,7 @@ Conceptos probados:
 - Descripción
 """
 
-import pytest
+import pytest 
 from src.models.concretos.silla import Silla
 
 

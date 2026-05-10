@@ -152,6 +152,19 @@ class TestComedorAgregarSilla:
         assert "No se pueden agregar más sillas" in resultado or "capacidad" in resultado.lower()
         assert len(comedor_vacio.sillas) == 4
 
+    def test_agregar_silla_objeto_no_valido(self, comedor_vacio):
+        """Prueba agregar un objeto que no es una Silla."""
+        # Agregar una silla primero para que valide el tipo
+        silla_valida = Silla("Silla Valida", "Madera", "Rojo", 50.0)
+        comedor_vacio.agregar_silla(silla_valida)
+        
+        # Intentar agregar un objeto no válido
+        objeto_invalido = "Esto no es una silla"
+        resultado = comedor_vacio.agregar_silla(objeto_invalido)
+        
+        assert "Solo se pueden agregar objetos de tipo Silla" in resultado
+        assert len(comedor_vacio.sillas) == 1
+
 
 class TestComedorQuitarSilla:
     """Pruebas para el método quitar_silla."""
@@ -192,6 +205,14 @@ class TestComedorQuitarSilla:
         resultado = comedor_con_sillas.quitar_silla(999)
         assert "Error" in resultado or "índice" in resultado.lower()
 
+    def test_quitar_silla_indice_negativo_valido(self, comedor_con_sillas):
+        """Prueba quitar silla con índice negativo válido."""
+        cantidad_inicial = len(comedor_con_sillas.sillas)
+        resultado = comedor_con_sillas.quitar_silla(-1)  # Última silla
+        
+        assert len(comedor_con_sillas.sillas) == cantidad_inicial - 1
+        assert "removida" in resultado.lower() or "quitada" in resultado.lower()
+
 
 class TestComedorCalcularPrecio:
     """Pruebas para el cálculo del precio total."""
@@ -230,6 +251,20 @@ class TestComedorCalcularPrecio:
         precio2 = comedor2.calcular_precio()
         
         assert precio2 > precio1
+
+    def test_calcular_precio_con_cuatro_sillas(self):
+        """Prueba calcular precio con 4 sillas (set completo según descripción)."""
+        mesa = Mesa("Mesa", "Madera", "Rojo", 200.0)
+        sillas = [Silla("Silla", "Madera", "Rojo", 50.0) for _ in range(4)]
+        comedor = Comedor("Comedor Grande", mesa, sillas)
+        
+        precio_total = comedor.calcular_precio()
+        precio_mesa = mesa.calcular_precio()
+        precio_sillas = sum(silla.calcular_precio() for silla in sillas)
+        precio_esperado = precio_mesa + precio_sillas
+        
+        # Actualmente no hay descuento implementado en el cálculo
+        assert precio_total == precio_esperado
 
 
 class TestComedorObtenerDescripcion:
@@ -274,3 +309,45 @@ class TestComedorListarComponentes:
         if hasattr(comedor, 'listar_componentes'):
             componentes = comedor.listar_componentes()
             assert len(componentes) > 0
+
+
+class TestComedorInternals:
+    """Pruebas adicionales para los métodos internos y propiedades."""
+
+    def test_len_y_str_comedor(self):
+        mesa = Mesa("Mesa Roble", "Roble", "Marrón", 200.0)
+        sillas = [Silla("Silla 1", "Roble", "Marrón", 50.0) for _ in range(3)]
+        comedor = Comedor("Comedor Familiar", mesa, sillas)
+
+        assert len(comedor) == 4
+        assert "Comedor Familiar" in str(comedor)
+
+    def test_len_comedor_solo_mesa(self):
+        """Prueba __len__ cuando solo hay mesa."""
+        mesa = Mesa("Mesa", "Madera", "Rojo", 100.0)
+        comedor = Comedor("Comedor", mesa)
+        
+        assert len(comedor) == 1
+
+    def test_obtener_resumen_contiene_precio_y_materiales(self):
+        mesa = Mesa("Mesa Roble", "Roble", "Marrón", 200.0)
+        sillas = [Silla("Silla 1", "Roble", "Marrón", 50.0)]
+        comedor = Comedor("Comedor Familiar", mesa, sillas)
+
+        resumen = comedor.obtener_resumen()
+        assert resumen["nombre"] == "Comedor Familiar"
+        assert resumen["total_muebles"] == 2
+        assert resumen["precio_total"] == comedor.calcular_precio_total()
+        assert any(material in resumen["materiales_utilizados"] for material in ["Roble", "Madera"])
+
+    def test_obtener_resumen_comedor_vacio(self):
+        """Prueba obtener resumen de comedor sin sillas."""
+        mesa = Mesa("Mesa", "Madera", "Rojo", 100.0)
+        comedor = Comedor("Comedor Vacío", mesa)
+
+        resumen = comedor.obtener_resumen()
+        assert resumen["nombre"] == "Comedor Vacío"
+        assert resumen["total_muebles"] == 1  # Solo mesa
+        assert resumen["precio_total"] == mesa.calcular_precio()  # Precio calculado de la mesa
+        assert resumen["capacidad_personas"] == 0
+

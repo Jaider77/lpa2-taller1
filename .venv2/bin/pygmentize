@@ -1,0 +1,6 @@
+#!/home/jaiderr77/pruebass/lpa2-taller1/.venv2/bin/python
+import sys
+from pygments.cmdline import main
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(main())
