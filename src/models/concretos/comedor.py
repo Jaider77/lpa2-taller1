@@ -1,6 +1,6 @@
 from typing import List
-from ..concretos.mesa import Mesa
-from ..concretos.silla import Silla
+from src.models.concretos.mesa import Mesa
+from src.models.concretos.silla import Silla
 
 
 class Comedor:

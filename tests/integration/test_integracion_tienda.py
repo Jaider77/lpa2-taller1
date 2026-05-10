@@ -5,7 +5,6 @@ Estas pruebas verifican la integración entre múltiples componentes
 del sistema.
 """
 
-import pytest  # noqa: F401
 from src.services.tienda import TiendaMuebles
 from src.models.concretos.silla import Silla
 from src.models.concretos.mesa import Mesa
@@ -81,7 +80,7 @@ class TestIntegracionTiendaCompleta:
         """Prueba aplicar descuento y luego vender."""
         tienda = TiendaMuebles()
         
-        tienda.agregar_mueble(Silla("Silla", "Madera", "Rojo", 100.0))
+        tienda.agregar_mueble(Silla("Silla", "Madera", "Rojo", 100.0, tiene_respaldo=False))
         tienda.aplicar_descuento("Silla", 0.2)
         
         # Obtener precio con descuento

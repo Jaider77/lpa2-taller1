@@ -1,22 +1,15 @@
-from rich.prompt import Confirm
-from rich.table import Table
-from rich.prompt import Prompt
-from rich.prompt import IntPrompt
-
-"""
-Interfaz de usuario usando Rich para crear un menú interactivo y atractivo.
-"""
-
-from rich.console import Console
-from rich.text import Text
-from rich.panel import Panel
-from typing import List, Optional
 import time
+import typing
+
+import rich.console
+from rich.panel import Panel
+from rich.prompt import Confirm, IntPrompt, Prompt
+from rich.table import Table
+from rich.text import Text
 
 # Corrección de imports para ejecución directa
-from services.tienda import TiendaMuebles
-from models.mueble import Mueble
-# TODO: Importar los servicios y modelos
+from src.models.mueble import Mueble
+from src.services.tienda import TiendaMuebles
 
 
 class MenuTienda:
@@ -28,7 +21,7 @@ class MenuTienda:
     - Buscar y filtrar productos
     - Realizar ventas
     - Ver estadísticas
-    - Gestionar inventario
+    - Gestionar inventario y descuentos
 
     Conceptos aplicados:
     - Separación de responsabilidades: La UI está separada de la lógica de negocio
@@ -45,14 +38,14 @@ class MenuTienda:
         """
         # Inicializar atributos
         self.tienda = tienda
-        self.console = Console()
+        self.console = rich.console.Console()
         self.running = True
 
     def mostrar_catalogo_completo(self):
         """Muestra todos los muebles disponibles en una tabla."""
 
         # Implementar visualización del catálogo
-        muebles = self.tienda._inventario  # Acceso directo para el ejemplo
+        muebles = self.tienda.obtener_inventario()  # Usar método público
 
         if not muebles:
             self.console.print("[yellow]No hay muebles en el inventario.[/yellow]")
@@ -73,7 +66,7 @@ class MenuTienda:
                 table.add_row(
                     str(i), mueble.nombre, tipo, mueble.material, mueble.color, precio
                 )
-            except Exception as e:
+            except Exception:
                 table.add_row(str(i), mueble.nombre, "Error", "-", "-", "Error")
 
         self.console.print(table)
@@ -166,7 +159,7 @@ class MenuTienda:
     def mostrar_comedores(self):
         """Muestra todos los comedores disponibles."""
 
-        comedores = self.tienda._comedores
+        comedores = self.tienda.obtener_comedores()
 
         if not comedores:
             self.console.print("[yellow]No hay comedores disponibles.[/yellow]")
@@ -180,7 +173,7 @@ class MenuTienda:
     def realizar_venta_interactiva(self):
         """Interfaz interactiva para realizar ventas."""
 
-        muebles = self.tienda._inventario
+        muebles = self.tienda.obtener_inventario()
 
         if not muebles:
             self.console.print("[red]No hay muebles disponibles para venta.[/red]")
@@ -198,7 +191,7 @@ class MenuTienda:
             mueble_seleccionado = muebles[indice - 1]
 
             # Mostrar detalles del mueble
-            self.console.print(f"\n[green]Mueble seleccionado:[/green]")
+            self.console.print("\n[green]Mueble seleccionado:[/green]")
             self.console.print(mueble_seleccionado.obtener_descripcion())
 
             confirmar = Confirm.ask("\n¿Confirmar la venta?")
@@ -316,7 +309,7 @@ class MenuTienda:
         except (ValueError, IndexError):
             self.console.print("[red]Selección inválida.[/red]")
 
-    def _mostrar_lista_muebles(self, muebles: List["Mueble"], numerada: bool = False):
+    def _mostrar_lista_muebles(self, muebles: typing.List["Mueble"], numerada: bool = False):
         """
         Muestra una lista de muebles en formato tabla.
         Método auxiliar privado.

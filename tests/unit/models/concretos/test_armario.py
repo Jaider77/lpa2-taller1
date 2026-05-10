@@ -77,9 +77,9 @@ class TestArmarioCalcularPrecio:
 
     @pytest.mark.parametrize("num_puertas,num_cajones,tiene_espejos,esperado", [
         (2, 0, False, 300),      # 200 + 100
-        (3, 2, False, 460),      # 200 + 150 + 60
+        (3, 2, False, 460),      # 200 + 150 + 110
         (2, 0, True, 400),       # 200 + 100 + 100
-        (4, 4, True, 620),       # 200 + 200 + 120 + 100
+        (4, 4, True, 720),       # 200 + 200 + 220 + 100
     ])
     def test_calcular_precio_componentes(self, num_puertas, num_cajones, tiene_espejos, esperado):
         """Prueba que cada componente afecta el precio."""

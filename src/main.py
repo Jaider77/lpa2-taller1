@@ -4,6 +4,9 @@ Punto de entrada principal para la aplicación Tienda de Muebles.
 Este archivo inicializa la aplicación y proporciona datos de ejemplo.
 """
 
+import sys
+sys.path.insert(0, 'src')
+
 from services.tienda import TiendaMuebles
 from ui.menu import MenuTienda
 

@@ -5,8 +5,10 @@ Un comedor está compuesto por una mesa y varias sillas.
 
 # Importar List para anotaciones de tipo
 from typing import List
-# from ..concretos.mesa import Mesa
-# from ..concretos.silla import Silla
+from src.models.concretos.mesa import Mesa
+from src.models.concretos.silla import Silla
+
+
 
 
 class Comedor:
@@ -191,9 +193,3 @@ class Comedor:
     def __len__(self) -> int:
         """Retorna el número total de muebles en el comedor."""
         return 1 + len(self._sillas)  # mesa + sillas
-
-    def obtener_descripcion(self) -> str:
-        """
-        Alias para obtener_descripcion_completa() para compatibilidad con tests.
-        """
-        return self.obtener_descripcion_completa()
