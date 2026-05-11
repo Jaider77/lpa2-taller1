@@ -13,7 +13,7 @@ class TestAlmacenamientoAbstracta:
     def test_almacenamiento_es_abstracta(self):
         """Prueba que Almacenamiento no se puede instanciar."""
         with pytest.raises(TypeError):
-            almacenamiento = Almacenamiento(
+            Almacenamiento(
                 "Armario", "Madera", "Rojo", 200.0,
                 capacidad_litros=100.0, tiene_puertas=True
             )
@@ -25,7 +25,7 @@ class TestSuperficieAbstracta:
     def test_superficie_es_abstracta(self):
         """Prueba que Superficie no se puede instanciar."""
         with pytest.raises(TypeError):
-            superficie = Superficie(
+            Superficie(
                 "Mesa", "Madera", "Rojo", 100.0,
                 largo=120.0, ancho=80.0, altura=75.0
             )

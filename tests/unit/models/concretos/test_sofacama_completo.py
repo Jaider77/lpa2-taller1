@@ -2,7 +2,6 @@
 Pruebas exhaustivas para la clase SofaCama.
 """
 
-import pytest
 from src.models.concretos.sofacama import SofaCama
 
 

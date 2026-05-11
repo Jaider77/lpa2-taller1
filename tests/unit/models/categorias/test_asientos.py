@@ -18,7 +18,7 @@ class TestAsientoAbstracta:
     def test_asiento_es_abstracta(self):
         """Verifica que Asiento no se puede instanciar directamente."""
         with pytest.raises(TypeError):
-            asiento = Asiento("Silla", "Madera", "Rojo", 100.0, 1, True)
+            Asiento("Silla", "Madera", "Rojo", 100.0, 1, True)
 
     def test_asiento_hereda_de_abc(self):
         """Verifica que Asiento hereda de ABC."""

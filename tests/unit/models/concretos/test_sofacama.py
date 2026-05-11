@@ -2,7 +2,6 @@
 Pruebas unitarias para la clase SofaCama (herencia múltiple).
 """
 
-import pytest
 from src.models.concretos.sofacama import SofaCama
 
 

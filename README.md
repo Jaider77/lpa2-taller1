@@ -1,5 +1,12 @@
 # LPA2 Taller1: Pruebas Unitarias Tienda de Muebles
 Jaider Asprilla Reyes
+
+
+# ejecucion del rpograma 
+
+python3 src/main.py  
+
+
 ![commits](https://badgen.net/github/commits/UR-CC/lpa2-taller1?icon=github) 
 ![last_commit](https://img.shields.io/github/last-commit/UR-CC/lpa2-taller1)
 
@@ -180,7 +187,7 @@ class TestMueble:
 
 ### Pruebas para Herencia
 
-**pytest tests/unit/models/concretos/test_silla.py - v:**
+**pytest tests/unit/models/concretos/test_silla.py -v:**
 
 ```python
 import pytest

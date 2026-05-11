@@ -8,6 +8,10 @@ import os
 import sys
 
 
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
 from src.services.tienda import TiendaMuebles
 from src.ui.menu import MenuTienda
 
@@ -21,11 +25,6 @@ from src.models.concretos.escritorio import Escritorio
 from src.models.concretos.cajonera import Cajonera
 from src.models.concretos.sofacama import SofaCama
 from src.models.composicion.comedor import Comedor
-
-
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
 
 
 def crear_catalogo_inicial(tienda: "TiendaMuebles") -> None:

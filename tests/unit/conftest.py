@@ -5,7 +5,6 @@ Este archivo contiene fixtures y configuraciones que se comparten
 entre todas las pruebas del proyecto.
 """
 
-import pytest
 
 
 def pytest_configure(config):

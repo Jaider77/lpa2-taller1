@@ -2,7 +2,6 @@
 Pruebas unitarias para clases concretas adicionales.
 """
 
-import pytest
 from src.models.concretos.sillon import Sillon
 from src.models.concretos.cajonera import Cajonera
 from src.models.concretos.escritorio import Escritorio

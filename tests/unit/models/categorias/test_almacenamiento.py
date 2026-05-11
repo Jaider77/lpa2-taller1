@@ -13,7 +13,7 @@ class TestAlmacenamientoAbstracto:
     def test_almacenamiento_es_abstracta(self):
         """Prueba que Almacenamiento no se puede instanciar directamente."""
         with pytest.raises(TypeError):
-            almacenamiento = Almacenamiento(
+            Almacenamiento(
                 "Almacenamiento", "Madera", "Nogal", 200.0, 3, 200.0
             )
 

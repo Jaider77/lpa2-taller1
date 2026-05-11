@@ -2,7 +2,6 @@
 Pruebas exhaustivas para la clase Comedor de composición.
 """
 
-import pytest
 from src.models.composicion.comedor import Comedor
 from src.models.concretos.mesa import Mesa
 from src.models.concretos.silla import Silla

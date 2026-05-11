@@ -13,7 +13,6 @@ import pytest
 from src.services.tienda import TiendaMuebles
 from src.models.concretos.silla import Silla
 from src.models.concretos.mesa import Mesa
-from src.models.concretos.cama import Cama
 from src.models.composicion.comedor import Comedor
 
 

@@ -105,7 +105,7 @@ class TestComedorComposicion:
         silla = Silla("Silla", "Madera", "Rojo", 50.0)
         
         # Crear comedor
-        comedor = Comedor("Comedor", mesa, [silla])
+        Comedor("Comedor", mesa, [silla])
         
         # Los muebles deben existir sin el comedor
         assert mesa.nombre == "Mesa"
